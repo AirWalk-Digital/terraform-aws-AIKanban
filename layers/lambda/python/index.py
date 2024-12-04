@@ -22,6 +22,7 @@ def lambda_handler(event, context):
     
     request = json.dumps(native_request)
     
+    
     try:
         response = client.invoke_model(modelId="amazon.titan-text-lite-v1", body=request)
 
