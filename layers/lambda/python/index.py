@@ -24,7 +24,7 @@ def lambda_handler(event, context):
     
     
     try:
-        response = client.invoke_model(modelId="amazon.titan-text-lite-v1", body=request)
+        response = client.invoke_model(modelId="amazon.titan-text-express-v1", body=request)
 
     except (ClientError, Exception) as e:
         print(f"ERROR: Can't invoke: Reason: {e}")
