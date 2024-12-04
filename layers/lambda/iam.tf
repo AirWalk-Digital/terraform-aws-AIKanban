@@ -48,3 +48,13 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_policy_attachment" {
   role       = aws_iam_role.lambda_bedrock_invocation_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
+
+# Allow access from API gateway
+resource "aws_lambda_permission" "apigw_lambda" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_bedrock_invoc.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*/*"
+}
