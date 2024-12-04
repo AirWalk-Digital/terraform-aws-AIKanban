@@ -10,8 +10,8 @@ client = boto3.client(service_name="bedrock-runtime", region_name="eu-west-2")
 def lambda_handler(event, context):
     
 
-    prompt = "Summarise the Reply consultancy group"
-    
+    prompt = "Your role is to take a transcript of a meeting, and output it in the form of Kanban board items, formatted in JSON. Only output JSON formatted actions. This is the transcript:" + event["prompt"]
+
     native_request = {
         "inputText": prompt,
         "textGenerationConfig": {
