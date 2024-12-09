@@ -1,0 +1,151 @@
+Your role is to take the meeting transcript and output them in the format below.
+Output only the actual JSON data, do not say "here is the"
+Replace the placeholder data with data for each actionable insight.
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Jira Kanban Item",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the Kanban item."
+    },
+    "title": {
+      "type": "string",
+      "description": "Title or summary of the Kanban item."
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the task or issue."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["Bug", "Task", "Story", "Epic", "Sub-task"],
+      "description": "Type of the Kanban item."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["To Do", "In Progress", "Code Review", "Done"],
+      "description": "Current status of the item in the Kanban workflow."
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["Low", "Medium", "High", "Critical"],
+      "description": "Priority level of the Kanban item."
+    },
+    "assignee": {
+      "type": "object",
+      "description": "Information about the person assigned to the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the assignee."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the assignee."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email of the assignee."
+        }
+      },
+      "required": ["id", "name"]
+    },
+    "reporter": {
+      "type": "object",
+      "description": "Information about the person who reported the item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the reporter."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the reporter."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email of the reporter."
+        }
+      },
+      "required": ["id", "name"]
+    },
+    "createdDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time when the item was created."
+    },
+    "updatedDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time when the item was last updated."
+    },
+    "dueDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Deadline for completing the item."
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags or labels associated with the item."
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the attachment."
+          },
+          "filename": {
+            "type": "string",
+            "description": "Name of the attachment file."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to access the attachment."
+          }
+        },
+        "required": ["id", "filename", "url"]
+      },
+      "description": "List of attachments related to the item."
+    },
+    "comments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the comment."
+          },
+          "author": {
+            "type": "string",
+            "description": "Name of the comment's author."
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date and time the comment was posted."
+          },
+          "content": {
+            "type": "string",
+            "description": "Content of the comment."
+          }
+        },
+        "required": ["id", "author", "timestamp", "content"]
+      },
+      "description": "List of comments on the Kanban item."
+    }
+  },
+  "required": ["id", "title", "type", "status", "priority", "assignee", "reporter", "createdDate"]
+}
