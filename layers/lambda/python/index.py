@@ -45,11 +45,14 @@ def lambda_handler(event, context):
     
     elif model == "claude":
         
-        prompt = "What can you do?"
+        prompt = event["prompt"]
 
-        model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
+        model_id = "anthropic.claude-3-haiku-20240307-v1:0"
 
-        system_prompt = "Your role is to create summaries of meeting transcripts. Output a lists of tasks that need to be completed."
+        f = open("system_prompt.txt", "r")
+        
+
+        system_prompt = f.read()
 
         response = client.invoke_model(
             modelId = model_id,
@@ -63,7 +66,7 @@ def lambda_handler(event, context):
                     "content": [
                         {
                             "type": "text",
-                            "text": event["prompt"]
+                            "text": prompt
                         }
                     ]
                 }
