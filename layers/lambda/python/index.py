@@ -19,7 +19,7 @@ def lambda_handler(event, context):
             "inputText": prompt,
             "textGenerationConfig": {
                 "maxTokenCount": 512,
-                "temperature": 0.5,
+                "temperature": 0.2,
             },
         }
 
@@ -49,7 +49,7 @@ def lambda_handler(event, context):
 
         model_id = "anthropic.claude-3-haiku-20240307-v1:0"
 
-        f = open("system_prompt.txt", "r")
+        f = open("system_prompt2.txt", "r")
         
 
         system_prompt = f.read()

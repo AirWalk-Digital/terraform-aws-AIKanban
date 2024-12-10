@@ -1,6 +1,6 @@
-Your role is to take the meeting transcript and output them in the format below.
-Output only the actual JSON data, do not say "here is the"
+Your role is to take the provided meeting transcript and output them in the format below.
 Replace the placeholder data with data for each actionable insight.
+Your role is to return JSON data without any explanation chat at the start
 
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
