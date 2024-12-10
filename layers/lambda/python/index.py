@@ -19,7 +19,7 @@ def lambda_handler(event, context):
             "inputText": prompt,
             "textGenerationConfig": {
                 "maxTokenCount": 512,
-                "temperature": 0.5,
+                "temperature": 0.2,
             },
         }
 
