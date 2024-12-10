@@ -1,3 +1,7 @@
+resource "aws_api_gateway_account" "account" {
+  cloudwatch_role_arn = aws_iam_role.apigateway_cloudwatch_role.arn
+
+}
 
 resource "aws_api_gateway_rest_api" "rest_api" {
   name        = "${var.environment}-${var.project}-api-gateway"
@@ -46,4 +50,30 @@ resource "aws_api_gateway_integration_response" "proxy" {
   depends_on = [aws_api_gateway_method.proxy, aws_api_gateway_integration.lambda_integration]
 }
 
+resource "aws_api_gateway_deployment" "deployment" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  triggers = {
+    redeployment = timestamp()
+  }
+}
 
+resource "aws_api_gateway_stage" "stage" {
+  stage_name    = var.environment
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  deployment_id = aws_api_gateway_deployment.deployment.id
+
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gateway_logs.arn
+    format = jsonencode({
+      requestId = "$context.requestId",
+      ip        = "$context.identity.sourceIp"
+    })
+  }
+}
+
+
+resource "aws_cloudwatch_log_group" "api_gateway_logs" {
+  name              = "/aws/api-gateway/aikanban"
+  retention_in_days = 7
+}
