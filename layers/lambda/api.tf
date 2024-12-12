@@ -19,10 +19,11 @@ resource "aws_api_gateway_resource" "root" {
 }
 
 resource "aws_api_gateway_method" "proxy" {
-  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  resource_id   = aws_api_gateway_resource.root.id
-  http_method   = "POST"
-  authorization = "NONE"
+  rest_api_id      = aws_api_gateway_rest_api.rest_api.id
+  resource_id      = aws_api_gateway_resource.root.id
+  http_method      = "POST"
+  authorization    = "NONE"
+  api_key_required = true
 }
 
 resource "aws_api_gateway_integration" "lambda_integration" {
@@ -55,6 +56,11 @@ resource "aws_api_gateway_deployment" "deployment" {
   triggers = {
     redeployment = timestamp()
   }
+}
+
+resource "aws_api_gateway_api_key" "student_key" {
+  name        = "${var.environment}-${var.project}-student-key"
+  description = "Gives students access to the API"
 }
 
 resource "aws_api_gateway_stage" "stage" {
