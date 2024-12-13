@@ -1,3 +1,7 @@
+resource "aws_api_gateway_account" "account" {
+  cloudwatch_role_arn = aws_iam_role.apigateway_cloudwatch_role.arn
+
+}
 
 resource "aws_api_gateway_rest_api" "rest_api" {
   name        = "${var.environment}-${var.project}-api-gateway"
@@ -27,7 +31,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   resource_id             = aws_api_gateway_resource.root.id
   http_method             = aws_api_gateway_method.proxy.http_method
   integration_http_method = "POST"
-  type                    = "AWS"
+  type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.lambda_bedrock_invoc.invoke_arn
 }
 
@@ -47,8 +51,39 @@ resource "aws_api_gateway_integration_response" "proxy" {
   depends_on = [aws_api_gateway_method.proxy, aws_api_gateway_integration.lambda_integration]
 }
 
+resource "aws_api_gateway_deployment" "deployment" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  triggers = {
+    redeployment = timestamp()
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_api_gateway_api_key" "student_key" {
   name        = "${var.environment}-${var.project}-student-key"
   description = "Gives students access to the API"
 }
 
+resource "aws_api_gateway_stage" "stage" {
+  stage_name    = var.environment
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  deployment_id = aws_api_gateway_deployment.deployment.id
+
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gateway_logs.arn
+    format = jsonencode({
+      requestId = "$context.requestId",
+      ip        = "$context.identity.sourceIp"
+    })
+  }
+}
+
+
+resource "aws_cloudwatch_log_group" "api_gateway_logs" {
+  name              = "/aws/api-gateway/aikanban"
+  retention_in_days = 7
+}
