@@ -9,23 +9,13 @@ on:
    branches:
 
    - main
-
-   paths:
-
-   - /**
-
+   
  pull_request:
 
    branches:
 
    - main
-
-   paths:
-
-   - /**
-
  
-
 env:
 
  # verbosity setting for Terraform logs
