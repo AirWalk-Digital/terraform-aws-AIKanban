@@ -71,7 +71,7 @@ jobs:
 
        id: init
 
-       run: terraform init -backend-config=../../environment/dev/api.backend.conf
+       run: terraform init -backend-config=../../environment/dev/api/backend.conf
 
  
 
