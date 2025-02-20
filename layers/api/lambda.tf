@@ -6,7 +6,7 @@ data "archive_file" "python_code" {
 }
 
 resource "aws_lambda_function" "lambda_bedrock_invoc" {
-  filename         = "${path.module}/src/bedrock_lambda.zip"
+  filename         = "bedrock_lambda.zip"
   function_name    = "${var.environment}-${var.project}-lambda-bedrock-invoc"
   role             = aws_iam_role.lambda_bedrock_invocation_role.arn
   handler          = "index.lambda_handler"
