@@ -71,7 +71,7 @@ jobs:
 
        id: init
 
-       run: terraform init -backend-config=../../environment/dev/api/backend.conf
+       run: terraform init -backend-config=../../environment/prod/api/backend.conf
 
  
 
@@ -169,4 +169,4 @@ jobs:
 
        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
-       run: terraform apply -auto-approve -input=false
+       run: terraform apply -auto-approve -input=false -var-file=../../environment/prod/api/software-hut.tfvars
