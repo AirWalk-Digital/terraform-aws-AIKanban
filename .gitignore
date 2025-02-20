@@ -37,3 +37,6 @@ override.tf.json
 terraform.rc
 layers/.DS_Store
 layers/lambda/python/python.zip
+
+# Ignore lambda zip files
+*.zip
