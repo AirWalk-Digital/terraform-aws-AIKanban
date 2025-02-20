@@ -60,6 +60,11 @@ resource "aws_api_gateway_deployment" "deployment" {
   lifecycle {
     create_before_destroy = true
   }
+
+  depends_on = [
+    aws_api_gateway_method.proxy,
+    aws_api_gateway_integration.lambda_integration
+  ]
 }
 
 resource "aws_api_gateway_api_key" "student_key" {
@@ -82,8 +87,7 @@ resource "aws_api_gateway_stage" "stage" {
   }
 }
 
-
 resource "aws_cloudwatch_log_group" "api_gateway_logs" {
-  name              = "/aws/api-gateway/aikanban"
+  name              = "/aws/api-gateway/${var.environment}/aikanban"
   retention_in_days = 7
 }

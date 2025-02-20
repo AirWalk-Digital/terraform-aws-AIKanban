@@ -1,0 +1,45 @@
+name: Deploy Terraform to Production
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: Apply Terraform
+    runs-on: ubuntu-latest
+
+    env:
+      TF_BACKEND_CONF: ../../environment/dev/api/backend.conf  
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        working-directory: layers/api
+        run: terraform init -backend-config=$TF_BACKEND_CONF
+
+      - name: Terraform Validate
+        working-directory: layers/api
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: layers/api
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: layers/api
+        run: terraform apply -auto-approve tfplan

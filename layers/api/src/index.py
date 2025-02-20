@@ -55,11 +55,19 @@ def lambda_handler(event, context):
     print(model_response)
 
     response = model_response["content"][0]["text"]
-    
+
+    print("response")
+    print(response)
+    print(type(response))
+
     try:
-        suggestions = response["suggestions"]
+        suggestions = json.loads(response)["suggestions"]
+        print(suggestions)
 
     except Exception as err:
+        
+        print(err)
+
         return {
             'statusCode' : 500,
             'body' : str(err)
@@ -67,7 +75,7 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
-        'body': suggestions
+        'body': json.dumps(suggestions)
     }
 
 
