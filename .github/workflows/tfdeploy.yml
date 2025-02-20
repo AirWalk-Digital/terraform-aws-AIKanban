@@ -50,7 +50,7 @@ jobs:
 
        # We keep Terraform files in the terraform directory.
 
-       working-directory: ./terraform
+       working-directory: ./layers/api
 
  
 
